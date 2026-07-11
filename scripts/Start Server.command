@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-#   Start Cobblemon Server   —   double-click this file
+#   Start Server   —   double-click this file
 #
 #   Starts the public connection (Gate) and the world (Fabric).
 #   To STOP: close this window, or type  stop  and press Return.
@@ -12,7 +12,7 @@ FABRIC_DIR="$HERE/FabricModdedServer"
 GATE_DIR="$HERE/GateProxy"
 
 clear
-echo "🌿  Cobblemon Server"
+echo "🧱  Modded Minecraft Server"
 echo
 
 # ---- safety checks -------------------------------------------------

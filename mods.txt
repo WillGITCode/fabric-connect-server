@@ -1,0 +1,29 @@
+# ============================================================
+#  mods.txt — the gameplay mods for your server.
+#  These get installed on BOTH the server AND every player's client.
+#
+#  HOW TO ADD A MOD:
+#    1. Find it on Modrinth (https://modrinth.com) for Minecraft 1.21.1, Fabric.
+#    2. On the mod page: Versions → pick the 1.21.1 Fabric file →
+#       right-click the download button → Copy Link.
+#    3. Paste the link on its own line below.
+#    4. Re-run the setup, OR just drag the .jar into the mods/ folders (see README).
+#
+#  HOW TO REMOVE A MOD:
+#    Put a # at the start of its line (to disable it) or delete the line,
+#    and delete the matching .jar from the mods/ folders.
+#
+#  NOTE: every mod must be built for the SAME Minecraft version (1.21.1) as the
+#  server, and add-ons (e.g. Cobblemon extensions) must match the base mod's version.
+#
+#  You do NOT list Fabric API or FabricProxy-Lite here — the setup always installs
+#  those automatically (they're required plumbing).
+# ============================================================
+
+# --- Cobblemon (default proof-of-concept — remove/replace to make it your own) ---
+https://cdn.modrinth.com/data/MdwFAVRL/versions/kF7CvxTo/Cobblemon-fabric-1.7.3%2B1.21.1.jar
+
+# --- Examples of popular add-ons (uncomment + paste the correct 1.21.1 link) ---
+# Simple Voice Chat:   https://modrinth.com/mod/simple-voice-chat
+# Lithium (server perf)
+# FerriteCore (memory)

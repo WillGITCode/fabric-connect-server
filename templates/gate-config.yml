@@ -11,7 +11,7 @@ config:
   try:
     - fabric
   status:
-    motd: "A Gate + Connect Server"
+    motd: "A Modded Minecraft Server"
     showMaxPlayers: 500
   lite:
     enabled: false

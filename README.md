@@ -1,135 +1,114 @@
-# Cobblemon Server (Fabric + Gate + Minekube Connect)
+# Modded Minecraft Server — play with friends, one click
 
-A one-command setup for a **modded Minecraft 1.21.1 Cobblemon server** that friends on
-other networks can join **without port-forwarding your router or exposing your home IP**.
+Run a **modded Minecraft server** your friends can join from anywhere — **no port-forwarding and
+without exposing your home IP**. Your Mac dials out to [Minekube Connect](https://connect.minekube.com);
+friends just type a `something.play.minekube.net` address.
 
-It uses a [Gate](https://gate.minekube.com) proxy with [Minekube Connect](https://connect.minekube.com)
-built in: your server dials *out* to Minekube's edge, and players join a public
-`something.play.minekube.net` address that resolves to Minekube — never to you.
-
-> **Why Gate and not Velocity?** The obvious Velocity + `connect` plugin route does **not**
-> work with a Fabric backend — tunneled players get kicked at the handshake
-> (`multiplayer.disconnect.incompatible`) and land in Minekube's "Browser Hub". Gate's
-> native Connect support fixes it. See [NOTES](#notes--lessons-learned).
+Ships ready to run **Cobblemon** as a demo — [swap in any Fabric 1.21.1 mods](#-change-the-mods) you want.
 
 ---
 
-## Requirements
+## ✅ Before you start
 
-- **macOS** (Apple Silicon or Intel)
-- **Java 21 (JDK)** — required for Minecraft 1.21.1. Check with `java -version` (must say `21`).
-  Install from [Adoptium](https://adoptium.net/temurin/releases/?version=21) if you don't have it.
+- A **Mac**
+- **Java 21** — [download the macOS installer](https://adoptium.net/temurin/releases/?version=21) (pick the `.pkg`) and double-click it. That's the only thing to install by hand.
 
-## Quick start
+## 1. Get these files
 
-```sh
-git clone https://github.com/WillGITCode/cobblemon-server.git
-cd cobblemon-server
-./setup-cobblemon-server.command          # or double-click it in Finder
-```
+- **Easiest (no terminal):** on the GitHub page → green **Code** button → **Download ZIP** → double-click the ZIP to unzip.
+- **Terminal:** `git clone https://github.com/WillGITCode/fabric-connect-server.git`
 
-Setup downloads everything (~200 MB) and installs a ready-to-run server to
-`~/CobblemonServer` by default (pass a path to change it). Then:
+## 2. Host the server (the person running it)
 
-1. Open `~/CobblemonServer` in Finder.
-2. Double-click **`Start Cobblemon Server.command`**.
-3. Wait for `Done` in the window. Your public address is printed there and in `GateProxy/config.yml`.
-4. Friends join that `*.play.minekube.net` address; you can also join at `localhost:25565`.
+1. Double-click **`setup-server.command`** — downloads everything (~200 MB, a few minutes) into a new `~/ModdedServer` folder.
+2. Open `~/ModdedServer` and double-click **`Start Server.command`**.
+3. Wait for the word **`Done`**. The window shows your address (e.g. `mc-ab12cd.play.minekube.net`) — share it with friends.
+4. **Stop:** close that window, or double-click **`Stop Server.command`**.
 
-**To stop:** close the Start window (or type `stop` + Return). `Stop Cobblemon Server.command`
-is a force-stop safety net.
+## 3. Join as a player (each friend does this)
 
-> First double-click may hit macOS Gatekeeper ("unidentified developer"). Files obtained via
-> `git clone` are **not** quarantined, so this usually just works; if blocked, right-click → **Open** once.
+1. Double-click **`setup-client.command`** (needs the Minecraft Launcher installed & run once — **quit the launcher first**).
+2. Open the Minecraft Launcher → pick the **Modded** profile → **Play**.
+3. **Multiplayer → Add Server →** the host's `mc-XXXXXX.play.minekube.net` address.
 
-## Joining as a player (client setup)
+> **Blocked by macOS** ("unidentified developer")? Right-click the file → **Open** once, then it's trusted. (Files from `git clone` don't hit this.)
 
-A fully-modded server means **every player needs matching client mods** — otherwise they can't
-join. `setup-cobblemon-client.command` prepares the **official Minecraft Launcher** to join:
+---
 
-```sh
-./setup-cobblemon-client.command          # or double-click it
-```
+## 🔧 Change the mods
 
-Requirements: **Java 21** and the **Minecraft Launcher installed + run once** (logged in).
-It will:
-- install Fabric `0.19.3` for `1.21.1` into the launcher,
-- download Fabric API + Cobblemon into a **dedicated game folder** (`~/CobblemonClient`) so it
-  doesn't touch your other worlds/mods,
-- add a **"Cobblemon"** launcher profile pointed at that folder (existing profiles are preserved;
-  the file is backed up first).
+The demo ships **Cobblemon**. To make it your own — remember **every player must have the same mods**:
 
-> **Quit the Minecraft Launcher before running it** — the launcher rewrites its profiles on exit
-> and would drop the new one. The script reminds you and waits.
+- **Quick (drag-and-drop):** drop a Fabric **1.21.1** mod `.jar` into the `mods` folders —
+  server `~/ModdedServer/FabricModdedServer/mods`, client `~/ModdedClient/mods`.
+- **Reproducible:** edit **`mods.txt`** — paste a mod's Modrinth download link on its own line
+  (Modrinth → mod page → Versions → right-click the 1.21.1 Fabric file → Copy Link), then re-run setup.
+  Remove one by deleting its line and its `.jar`.
+- Don't list **Fabric API** or **FabricProxy-Lite** — setup always installs those.
 
-Then: open the launcher → pick the **Cobblemon** profile → Play → Multiplayer → add the host's
-`cobblemon-XXXX.play.minekube.net` address.
+Popular Cobblemon add-ons to try (must be built for MC 1.21.1): Simple Voice Chat, Cobbreeding, Mega Showdown, Radical Cobblemon Trainers.
 
-## What gets installed
+## 🧪 Make a different server to experiment
 
-```
-~/CobblemonServer/
-├── Start Cobblemon Server.command
-├── Stop Cobblemon Server.command
-├── FabricModdedServer/     # Fabric 1.21.1 server + mods + world
-│   ├── mods/               # Cobblemon, Fabric API, FabricProxy-Lite
-│   └── config/FabricProxy-Lite.toml
-└── GateProxy/
-    ├── gate                # Gate binary
-    └── config.yml          # proxy + Connect endpoint (holds your secret)
-```
+The **Fabric installer is itself a clickable app**: [download `fabric-installer.jar`](https://fabricmc.net/use/installer/),
+double-click it, choose the **Server** (or **Client**) tab, pick any Minecraft version, and **Install**.
+Handy for trying other versions or mod sets by hand. Our `setup-server.command` just automates the 1.21.1 case.
 
-## Pinned versions (verified July 2026)
+---
+
+<details>
+<summary><b>Details — versions, how it works, lessons</b></summary>
+
+### Pinned versions (verified July 2026)
 
 | Component | Version |
 |---|---|
 | Minecraft | 1.21.1 |
 | Fabric loader / installer | 0.19.3 / 1.1.1 |
-| Cobblemon | 1.7.3+1.21.1 |
 | Fabric API | 0.116.13+1.21.1 |
 | FabricProxy-Lite | 2.10.1 |
 | Gate | 0.68.26 |
+| Cobblemon (demo mod) | 1.7.3+1.21.1 |
 
-To bump versions, edit the URLs/versions at the top of `setup-cobblemon-server.command`.
+To move to another Minecraft version, update the URLs at the top of `setup-server.command` / `setup-client.command` and the links in `mods.txt`.
 
-## How it's wired
-
-```
-Friend's client ── cobblemon-XXXX.play.minekube.net ──▶ Minekube edge (public)
-                                                            │ outbound tunnel
-                                                            ▼
-                                          Gate  0.0.0.0:25565  (Connect built in)
-                                                            │ velocity modern forwarding
-                                                            ▼
-                                          Fabric  127.0.0.1:25566  (offline-mode)
-```
-
-- Gate authenticates players and forwards a trusted profile, so the **backend runs offline-mode**.
-- The **shared secret** must match between `GateProxy/config.yml` (`velocitySecret`) and
-  `FabricModdedServer/config/FabricProxy-Lite.toml` (`secret`). Setup generates a fresh one for both.
-- The **endpoint name** (`cobblemon-XXXX`) is random per install so it won't collide on the
-  Connect network. Change it in `GateProxy/config.yml` if you like — the Start script reads it automatically.
-
-## Repo layout
+### How it's wired
 
 ```
-setup-cobblemon-server.command   # host installer (server + proxy)
-setup-cobblemon-client.command   # player installer (Minecraft Launcher: Fabric + client mods)
-scripts/                         # source of the Start/Stop launchers (setup copies these)
-templates/                       # config templates (setup fills in secret + endpoint)
+Friend's client ── mc-XXXXXX.play.minekube.net ──▶ Minekube edge (public)
+                                                       │ outbound tunnel (no ports opened)
+                                                       ▼
+                                     Gate  0.0.0.0:25565  (Connect built in)
+                                                       │ velocity modern forwarding
+                                                       ▼
+                                     Fabric  127.0.0.1:25566  (offline-mode)
 ```
 
-Downloaded jars, world data, logs, and the generated `config.yml`/secret are **git-ignored** —
-the repo stays small and never contains secrets or Mojang's `server.jar` (which must not be redistributed).
+The public address points at Minekube's shared edge, never your home IP. Gate authenticates players and
+forwards a trusted profile, so the backend runs `online-mode=false` and the shared secret in
+`GateProxy/config.yml` must match `FabricProxy-Lite.toml` (setup generates one value for both).
 
-## Notes / lessons learned
+### Repo layout
 
-- **Backend must be `online-mode=false`** behind modern-forwarding. `online-mode=true` +
-  FabricProxy-Lite `hackOnlineMode=true` *appears* to work for direct connections but breaks over Connect.
-- **Everything must be the same Minecraft version.** Gate accepts many client versions; the single
-  Fabric backend only speaks 1.21.1 and rejects anything else as incompatible.
-- **"Hub"** = Minekube's Browser Hub fallback, shown when your endpoint is offline or a player is
-  disconnected from your backend. Seeing it means the player didn't stay on your server.
-- **Known open issue:** connecting from the *same machine/network* as the server (traffic hairpins
-  out to the edge and back) has dropped the session periodically in testing; a genuinely remote
-  client is the real test. `localhost:25565` (no tunnel) is always stable.
+```
+setup-server.command   # host installer (server + proxy)
+setup-client.command   # player installer (Minecraft Launcher + mods)
+mods.txt               # gameplay mods (edit to change what's installed)
+scripts/               # source of the Start/Stop launchers (setup copies these)
+templates/             # Gate + FabricProxy-Lite config templates (setup fills in secret + endpoint)
+```
+
+Downloaded jars, worlds, logs, and the generated `config.yml`/secret are git-ignored — the repo never
+contains secrets or Mojang's `server.jar` (which must not be redistributed).
+
+### Notes / lessons
+
+- **Use Gate, not Velocity.** Velocity + the `connect` plugin kicks Fabric-tunneled players at the
+  handshake (`multiplayer.disconnect.incompatible`) → they land in Minekube's "Browser Hub". Gate's
+  native Connect support fixes it.
+- **Backend must be `online-mode=false`** behind modern forwarding (the proxy does the auth).
+- **All players need the same Minecraft version + mods**, or they're rejected as incompatible.
+- **Known quirk:** connecting from the *same machine* as the server has dropped the session ~every 60s
+  (traffic hairpins out to the edge and back). `localhost:25565` and genuinely remote players are fine.
+
+</details>
