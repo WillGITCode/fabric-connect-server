@@ -23,7 +23,7 @@ built in: your server dials *out* to Minekube's edge, and players join a public
 ## Quick start
 
 ```sh
-git clone <your-private-repo-url> cobblemon-server
+git clone https://github.com/WillGITCode/cobblemon-server.git
 cd cobblemon-server
 ./setup-cobblemon-server.command          # or double-click it in Finder
 ```
