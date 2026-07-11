@@ -46,7 +46,7 @@ trap stop_all EXIT INT TERM HUP
 
 # ---- start Gate in the background ----------------------------------
 echo "🌐  Starting the public connection (Gate)..."
-( cd "$GATE_DIR" && exec ./gate ) > "$GATE_DIR/gate.log" 2>&1 &
+( cd "$GATE_DIR" && exec "$GATE_DIR/gate" ) > "$GATE_DIR/gate.log" 2>&1 &
 GATE_PID=$!
 
 echo

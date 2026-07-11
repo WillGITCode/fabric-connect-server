@@ -9,7 +9,7 @@
 echo "🛑  Stopping the Cobblemon server..."
 
 # Only match OUR processes, not anything else on the machine.
-pkill -f 'GateProxy/gate'            2>/dev/null && echo "   • public connection (Gate) stopped"
+pkill -x 'gate'                      2>/dev/null && echo "   • public connection (Gate) stopped"
 pkill -f 'fabric-server-launch.jar'  2>/dev/null && echo "   • world (Fabric) stopped"
 
 sleep 1
