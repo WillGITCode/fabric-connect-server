@@ -61,9 +61,17 @@ Popular add-ons to try (must be built for MC 1.21.1): Simple Voice Chat, Cobbree
 
 ## 🧪 Make a different server to experiment
 
-The **Fabric installer is itself a clickable app**: [download `fabric-installer.jar`](https://fabricmc.net/use/installer/),
-double-click it, choose the **Server** (or **Client**) tab, pick any Minecraft version, and **Install**.
+The **Fabric installer** has a GUI. [Download `fabric-installer.jar`](https://fabricmc.net/use/installer/),
+then open it from **Terminal** (double-clicking a `.jar` fails on macOS — see note below):
+```sh
+java -jar ~/Downloads/fabric-installer-1.1.1.jar
+```
+Its window opens → choose the **Server** (or **Client**) tab, pick any Minecraft version, and **Install**.
 Handy for trying other versions or mod sets by hand. Our `setup-server.command` just automates the 1.21.1 case.
+
+> **Why not double-click the `.jar`?** macOS hands `.jar` files to a legacy "Jar Launcher" that looks for
+> Java at the old applet-plugin path, which a modern JDK doesn't create — you get
+> *"Failed to execute …JavaAppletPlugin.plugin…: No such file or directory"*. Launching with `java -jar` uses your installed JDK and works.
 
 ---
 
@@ -76,8 +84,8 @@ need **Terminal.app** (open it and `cd` into your folder).
 **A. Java 21** — [download the macOS installer](https://adoptium.net/temurin/releases/?version=21) (`.pkg`), double-click, install.
 
 **B. The Fabric server**
-1. Download the [**Fabric installer**](https://fabricmc.net/use/installer/) (a clickable `.jar`) → double-click it.
-2. **Server** tab → Minecraft **1.21.1**, Loader **0.19.3** → pick a new folder (e.g. `~/Desktop/ModdedServer/FabricModdedServer`) → **Install Server**. Creates `fabric-server-launch.jar`.
+1. Download the [**Fabric installer**](https://fabricmc.net/use/installer/) `.jar`, then open it from **Terminal** — `java -jar ~/Downloads/fabric-installer-1.1.1.jar` (double-clicking a `.jar` fails on macOS; see the note under "Make a different server" above).
+2. In the window: **Server** tab → Minecraft **1.21.1**, Loader **0.19.3** → pick a new folder (e.g. `~/Desktop/ModdedServer/FabricModdedServer`) → **Install Server**. Creates `fabric-server-launch.jar`.
 3. Put the **1.21.1 `server.jar`** in that folder: [direct download](https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar) (the official page only has the newest version).
 
 **C. Mods** → into a `mods` subfolder. From Modrinth, grab each mod's **1.21.1 Fabric** file:
