@@ -47,8 +47,8 @@ GATE_DIR="$BASE_DIR/GateProxy"
 ENDPOINT_NAME="cobblemon-$(openssl rand -hex 3)"
 SECRET="$(openssl rand -hex 16)"
 
-dl() { # dl <url> <dest>  — skip if already present
-  if [ -f "$2" ]; then echo "   ✓ already have $(basename "$2")"; return; fi
+dl() { # dl <url> <dest>  — skip if already present AND non-empty (re-fetch truncated files)
+  if [ -f "$2" ] && [ -s "$2" ]; then echo "   ✓ already have $(basename "$2")"; return; fi
   echo "   ↓ $(basename "$2")"
   curl -fSL --retry 3 -o "$2" "$1"
 }
@@ -83,6 +83,8 @@ if [ ! -f "$FABRIC_DIR/fabric-server-launch.jar" ]; then
   echo "   • running Fabric installer..."
   java -jar "$INSTALLER_JAR" server -mcversion "$MC_VERSION" -loader "$FABRIC_LOADER" -dir "$FABRIC_DIR" >/dev/null
 fi
+# validate the installer actually produced the launch jar
+[ -f "$FABRIC_DIR/fabric-server-launch.jar" ] || { echo "❌ Fabric server install failed (fabric-server-launch.jar missing)."; exit 1; }
 dl "$SERVER_JAR_URL" "$FABRIC_DIR/server.jar"
 
 # ---------- EULA + server.properties ------------------------

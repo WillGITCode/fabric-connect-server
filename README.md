@@ -42,6 +42,29 @@ is a force-stop safety net.
 > First double-click may hit macOS Gatekeeper ("unidentified developer"). Files obtained via
 > `git clone` are **not** quarantined, so this usually just works; if blocked, right-click → **Open** once.
 
+## Joining as a player (client setup)
+
+A fully-modded server means **every player needs matching client mods** — otherwise they can't
+join. `setup-cobblemon-client.command` prepares the **official Minecraft Launcher** to join:
+
+```sh
+./setup-cobblemon-client.command          # or double-click it
+```
+
+Requirements: **Java 21** and the **Minecraft Launcher installed + run once** (logged in).
+It will:
+- install Fabric `0.19.3` for `1.21.1` into the launcher,
+- download Fabric API + Cobblemon into a **dedicated game folder** (`~/CobblemonClient`) so it
+  doesn't touch your other worlds/mods,
+- add a **"Cobblemon"** launcher profile pointed at that folder (existing profiles are preserved;
+  the file is backed up first).
+
+> **Quit the Minecraft Launcher before running it** — the launcher rewrites its profiles on exit
+> and would drop the new one. The script reminds you and waits.
+
+Then: open the launcher → pick the **Cobblemon** profile → Play → Multiplayer → add the host's
+`cobblemon-XXXX.play.minekube.net` address.
+
 ## What gets installed
 
 ```
@@ -90,7 +113,8 @@ Friend's client ── cobblemon-XXXX.play.minekube.net ──▶ Minekube edge 
 ## Repo layout
 
 ```
-setup-cobblemon-server.command   # the installer
+setup-cobblemon-server.command   # host installer (server + proxy)
+setup-cobblemon-client.command   # player installer (Minecraft Launcher: Fabric + client mods)
 scripts/                         # source of the Start/Stop launchers (setup copies these)
 templates/                       # config templates (setup fills in secret + endpoint)
 ```
