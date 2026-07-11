@@ -31,10 +31,19 @@ MC_DIR="$HOME/Library/Application Support/minecraft"
 PROFILES_JSON="$MC_DIR/launcher_profiles.json"
 VERSION_ID="fabric-loader-${FABRIC_LOADER}-${MC_VERSION}"
 
-dl() { # dl <url> <dest> — skip if present AND non-empty
-  if [ -f "$2" ] && [ -s "$2" ]; then echo "   ✓ already have $(basename "$2")"; return; fi
+dl() { # dl <url> <dest> — skip only if present and (for jars) a valid zip; else (re)download + verify
+  if [ -f "$2" ] && [ -s "$2" ]; then
+    case "$2" in
+      *.jar) if unzip -tqq "$2" >/dev/null 2>&1; then echo "   ✓ already have $(basename "$2")"; return; fi
+             echo "   ⚠️  $(basename "$2") is incomplete/corrupt — re-downloading" ;;
+      *) echo "   ✓ already have $(basename "$2")"; return ;;
+    esac
+  fi
   echo "   ↓ $(basename "$2")"
   curl -fSL --retry 3 -o "$2" "$1"
+  case "$2" in
+    *.jar) unzip -tqq "$2" >/dev/null 2>&1 || { echo "   ❌ $(basename "$2") downloaded corrupt (incomplete zip). Check your connection and re-run."; exit 1; } ;;
+  esac
 }
 
 install_mods_from_list() { # <list-file> <dest-mods-dir>
@@ -60,7 +69,7 @@ echo "    Log: $LOGFILE"
 echo
 
 # ---------- preflight ---------------------------------------
-for t in java curl python3; do
+for t in java curl python3 unzip; do
   command -v "$t" >/dev/null 2>&1 || { echo "❌ Missing required tool: $t"; exit 1; }
 done
 JV="$(java -version 2>&1)"; echo "☕ Java: ${JV%%$'\n'*}"
