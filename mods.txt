@@ -23,7 +23,10 @@
 # --- Cobblemon (default proof-of-concept — remove/replace to make it your own) ---
 https://cdn.modrinth.com/data/MdwFAVRL/versions/kF7CvxTo/Cobblemon-fabric-1.7.3%2B1.21.1.jar
 
-# --- Examples of popular add-ons (uncomment + paste the correct 1.21.1 link) ---
-# Simple Voice Chat:   https://modrinth.com/mod/simple-voice-chat
-# Lithium (server perf)
-# FerriteCore (memory)
+# --- Popular add-ons: delete the leading "# " on the LINK line to enable one ---
+# Simple Voice Chat (proximity voice — server + client):
+# https://cdn.modrinth.com/data/9eGKb6K1/versions/IttovdN3/voicechat-fabric-1.21.1-2.6.20.jar
+# Lithium (server performance):
+# https://cdn.modrinth.com/data/gvQqBUqZ/versions/N08Z8wog/lithium-fabric-0.15.4%2Bmc1.21.1.jar
+# FerriteCore (lower memory use):
+# https://cdn.modrinth.com/data/uXXizFIs/versions/sOzRw3CG/ferritecore-7.0.3-fabric.jar

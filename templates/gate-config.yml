@@ -1,5 +1,5 @@
 config:
-  bind: 0.0.0.0:25565
+  bind: 0.0.0.0:__PROXYPORT__
   onlineMode: true
   # Velocity modern forwarding — this MUST match FabricProxy-Lite's secret.
   forwarding:
@@ -7,11 +7,11 @@ config:
     velocitySecret: "__SECRET__"
   announceForge: false
   servers:
-    fabric: 127.0.0.1:25566
+    fabric: 127.0.0.1:__BACKENDPORT__
   try:
     - fabric
   status:
-    motd: "A Modded Minecraft Server"
+    motd: "__MOTD__"
     showMaxPlayers: 500
   lite:
     enabled: false

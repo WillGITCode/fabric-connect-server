@@ -42,10 +42,24 @@ case "$(uname -m)" in
 esac
 GATE_URL="https://github.com/minekube/gate/releases/download/v${GATE_VERSION}/gate_${GATE_VERSION}_darwin_${GARCH}"
 
+# If installing to the DEFAULT location and it already exists, make a fresh
+# non-colliding instance (ModdedServer-2, -3, …) instead of clobbering it.
+INSTANCE=1
+if [ -z "${1:-}" ]; then
+  while [ -e "$BASE_DIR" ]; do INSTANCE=$((INSTANCE + 1)); BASE_DIR="$HOME/Desktop/ModdedServer-$INSTANCE"; done
+fi
+
 FABRIC_DIR="$BASE_DIR/FabricModdedServer"
 GATE_DIR="$BASE_DIR/GateProxy"
-ENDPOINT_NAME="${ENDPOINT_PREFIX}-$(openssl rand -hex 3)"   # globally-unique-ish
+SERVER_NAME="$(basename "$BASE_DIR")"                        # e.g. ModdedServer, ModdedServer-2
+ENDPOINT_NAME="${ENDPOINT_PREFIX}-$(openssl rand -hex 3)"   # globally-unique public address
 SECRET="$(openssl rand -hex 16)"
+
+# Give each instance its own ports so several servers can run at the same time.
+port_free() { ! lsof -nP -iTCP:"$1" -sTCP:LISTEN >/dev/null 2>&1; }
+PROXY_PORT=$(( 25565 + (INSTANCE - 1) * 2 ))
+while ! port_free "$PROXY_PORT" || ! port_free "$((PROXY_PORT + 1))"; do PROXY_PORT=$((PROXY_PORT + 2)); done
+BACKEND_PORT=$((PROXY_PORT + 1))
 
 dl() { # dl <url> <dest> — skip only if present and (for jars) a valid zip; else (re)download + verify
   if [ -f "$2" ] && [ -s "$2" ]; then
@@ -62,8 +76,10 @@ dl() { # dl <url> <dest> — skip only if present and (for jars) a valid zip; el
   esac
 }
 
-render() { # render <template> <dest>  — substitute __SECRET__ / __ENDPOINT__
-  sed -e "s|__SECRET__|${SECRET}|g" -e "s|__ENDPOINT__|${ENDPOINT_NAME}|g" "$1" > "$2"
+render() { # render <template> <dest>  — fill in secret / endpoint / ports / name
+  sed -e "s|__SECRET__|${SECRET}|g" -e "s|__ENDPOINT__|${ENDPOINT_NAME}|g" \
+      -e "s|__PROXYPORT__|${PROXY_PORT}|g" -e "s|__BACKENDPORT__|${BACKEND_PORT}|g" \
+      -e "s|__MOTD__|${SERVER_NAME}|g" "$1" > "$2"
 }
 
 install_mods_from_list() { # install_mods_from_list <list-file> <dest-mods-dir>
@@ -120,9 +136,9 @@ printf 'eula=true\n' > "$FABRIC_DIR/eula.txt"
 if [ ! -f "$FABRIC_DIR/server.properties" ]; then
 cat > "$FABRIC_DIR/server.properties" <<PROPS
 #Minecraft server properties
-server-port=25566
+server-port=$BACKEND_PORT
 online-mode=false
-motd=A Modded Minecraft Server
+motd=$SERVER_NAME
 max-players=20
 difficulty=easy
 gamemode=survival
@@ -165,6 +181,7 @@ echo " ✅  Setup complete!"
 echo
 echo "   Folder:          $BASE_DIR"
 echo "   Public address:  ${ENDPOINT_NAME}.play.minekube.net"
+echo "   Local ports:     proxy ${PROXY_PORT}, world ${BACKEND_PORT}"
 echo
 echo "   To play: open $BASE_DIR in Finder and double-click"
 echo "            \"Start Server.command\""

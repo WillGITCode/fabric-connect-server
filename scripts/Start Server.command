@@ -32,6 +32,7 @@ fi
 # Read the public address straight from Gate's config so it's always correct.
 ENDPOINT="$(awk '/^connect:/{f=1} f && /name:/{gsub(/["\x27]/,"",$2); print $2; exit}' "$GATE_DIR/config.yml" 2>/dev/null)"
 PUBLIC_ADDR="${ENDPOINT:-<your-endpoint>}.play.minekube.net"
+LOCAL_PORT="$(awk -F: '/^[[:space:]]*bind:/{gsub(/[^0-9]/,"",$NF); print $NF; exit}' "$GATE_DIR/config.yml" 2>/dev/null)"
 
 # ---- stop everything cleanly on exit -------------------------------
 GATE_PID=""
@@ -54,7 +55,7 @@ echo "==========================================================="
 echo "  Loading the world... watch for the word  Done  below."
 echo
 echo "  Friends join:   $PUBLIC_ADDR"
-echo "  On this Mac:    localhost:25565"
+echo "  On this Mac:    localhost:${LOCAL_PORT:-25565}"
 echo
 echo "  Logs saved in:  FabricModdedServer/logs/  and  GateProxy/gate.log"
 echo
