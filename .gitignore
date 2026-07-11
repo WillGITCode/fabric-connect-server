@@ -1,0 +1,20 @@
+# ---- Generated server instances & downloads (never commit) ----
+# Default install location if someone runs setup with no argument:
+/CobblemonServer/
+# If someone installs INTO this repo folder, ignore the generated bits:
+/FabricModdedServer/
+/GateProxy/
+*.jar
+world/
+world_nether/
+world_the_end/
+logs/
+*.log
+
+# ---- Secrets / tokens (never commit) ----
+token.json
+config.yml
+FabricProxy-Lite.toml.local
+
+# ---- macOS cruft ----
+.DS_Store

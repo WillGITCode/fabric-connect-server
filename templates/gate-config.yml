@@ -1,0 +1,22 @@
+config:
+  bind: 0.0.0.0:25565
+  onlineMode: true
+  # Velocity modern forwarding — this MUST match FabricProxy-Lite's secret.
+  forwarding:
+    mode: velocity
+    velocitySecret: "__SECRET__"
+  announceForge: false
+  servers:
+    fabric: 127.0.0.1:25566
+  try:
+    - fabric
+  status:
+    motd: "A Gate + Connect Server"
+    showMaxPlayers: 500
+  lite:
+    enabled: false
+# Connect module — exposes this proxy publicly, no port forwarding.
+# Public address becomes:  <name>.play.minekube.net
+connect:
+  enabled: true
+  name: __ENDPOINT__

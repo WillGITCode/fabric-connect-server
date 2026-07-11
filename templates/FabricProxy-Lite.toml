@@ -1,0 +1,5 @@
+hackOnlineMode = false
+hackEarlySend = false
+hackMessageChain = false
+disconnectMessage = "This server requires you to connect through the proxy."
+secret = "__SECRET__"
