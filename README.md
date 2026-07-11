@@ -68,6 +68,65 @@ Handy for trying other versions or mod sets by hand. Our `setup-server.command` 
 ---
 
 <details>
+<summary><b>Manual setup — build it by hand (no scripts)</b></summary>
+
+The exact same result the scripts produce. Uses the clickable installers where possible; a few steps
+need **Terminal.app** (open it and `cd` into your folder).
+
+**A. Java 21** — [download the macOS installer](https://adoptium.net/temurin/releases/?version=21) (`.pkg`), double-click, install.
+
+**B. The Fabric server**
+1. Download the [**Fabric installer**](https://fabricmc.net/use/installer/) (a clickable `.jar`) → double-click it.
+2. **Server** tab → Minecraft **1.21.1**, Loader **0.19.3** → pick a new folder (e.g. `~/Desktop/ModdedServer/FabricModdedServer`) → **Install Server**. Creates `fabric-server-launch.jar`.
+3. Put the **1.21.1 `server.jar`** in that folder: [direct download](https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar) (the official page only has the newest version).
+
+**C. Mods** → into a `mods` subfolder. From Modrinth, grab each mod's **1.21.1 Fabric** file:
+- [Fabric API](https://modrinth.com/mod/fabric-api) — needed by most mods
+- [FabricProxy-Lite](https://modrinth.com/mod/fabricproxy-lite) — lets the server accept players coming through the proxy
+- [Cobblemon](https://modrinth.com/mod/cobblemon) — the demo mod (swap for anything)
+
+**D. First run + EULA** — in Terminal, inside the server folder:
+```
+java -jar fabric-server-launch.jar nogui
+```
+It stops and asks for the EULA → open `eula.txt`, set `eula=true`.
+
+**E. Point the server at the proxy**
+- In `server.properties`: `server-port=25566` and **`online-mode=false`** ← the key fix (the proxy does the login).
+- Create `config/FabricProxy-Lite.toml`:
+  ```toml
+  hackOnlineMode = false
+  hackEarlySend = false
+  hackMessageChain = false
+  secret = "PICK-A-RANDOM-STRING"
+  ```
+
+**F. The Gate proxy** — *this is the fix: Gate, not Velocity*
+1. Download [**Gate**](https://github.com/minekube/gate/releases/latest) (`gate_..._darwin_arm64`) into a `GateProxy` folder.
+2. In Terminal: `chmod +x gate && xattr -dr com.apple.quarantine gate`
+3. Create `GateProxy/config.yml` (same secret as step E):
+   ```yaml
+   config:
+     bind: 0.0.0.0:25565
+     onlineMode: true
+     forwarding: { mode: velocity, velocitySecret: "PICK-A-RANDOM-STRING" }
+     servers: { fabric: 127.0.0.1:25566 }
+     try: [fabric]
+     lite: { enabled: false }
+   connect:
+     enabled: true
+     name: pick-a-unique-name        # → pick-a-unique-name.play.minekube.net
+   ```
+
+**G. Run it** — two Terminal windows:
+- Server (in the server folder): `java -jar fabric-server-launch.jar nogui`
+- Proxy (in `GateProxy`): `./gate` → it prints your public address.
+
+Test at `localhost:25565`, then share `your-name.play.minekube.net`. Players still need the client mods (step C on their machine + a Fabric profile in their launcher).
+
+</details>
+
+<details>
 <summary><b>Details — versions, how it works, lessons</b></summary>
 
 ### Pinned versions (verified July 2026)

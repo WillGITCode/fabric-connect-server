@@ -70,8 +70,14 @@ install_mods_from_list() { # install_mods_from_list <list-file> <dest-mods-dir>
   done < "$listfile"
 }
 
+# Keep a log file so problems can be diagnosed after the window closes.
+mkdir -p "$BASE_DIR"
+LOGFILE="$BASE_DIR/setup-server.log"
+exec > >(tee -a "$LOGFILE") 2>&1
+
 echo "🧱  Modded Minecraft server setup"
 echo "    Installing to: $BASE_DIR"
+echo "    Log:           $LOGFILE"
 echo
 
 # ---------- preflight ---------------------------------------

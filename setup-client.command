@@ -50,7 +50,13 @@ install_mods_from_list() { # <list-file> <dest-mods-dir>
   done < "$listfile"
 }
 
+# Keep a log file so problems can be diagnosed after the window closes.
+mkdir -p "$CLIENT_DIR"
+LOGFILE="$CLIENT_DIR/setup-client.log"
+exec > >(tee -a "$LOGFILE") 2>&1
+
 echo "🎮  Modded Minecraft CLIENT setup"
+echo "    Log: $LOGFILE"
 echo
 
 # ---------- preflight ---------------------------------------

@@ -56,12 +56,15 @@ echo
 echo "  Friends join:   $PUBLIC_ADDR"
 echo "  On this Mac:    localhost:25565"
 echo
+echo "  Logs saved in:  FabricModdedServer/logs/  and  GateProxy/gate.log"
+echo
 echo "  To STOP: close this window (or type  stop  + Return)."
 echo "==========================================================="
 echo
 
 # ---- run the world in the foreground (console stays usable) --------
 cd "$FABRIC_DIR"
-java -Xms2G -Xmx4G -XX:+UseG1GC -jar fabric-server-launch.jar nogui
+mkdir -p logs
+java -Xms2G -Xmx4G -XX:+UseG1GC -jar fabric-server-launch.jar nogui 2>&1 | tee -a "$FABRIC_DIR/logs/launcher-session.log"
 
 # Fabric exited (you typed 'stop' or closed the window) -> trap stops Gate.
