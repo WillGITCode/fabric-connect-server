@@ -19,7 +19,7 @@ MODS_LIST="$SELF/mods.txt"
 
 # ---------- settings (safe to edit) -------------------------
 PROFILE_NAME="Modded"                    # name shown in the launcher's profile picker
-CLIENT_DIR="$HOME/ModdedClient"          # isolated game dir (own mods/worlds)
+CLIENT_DIR="$HOME/Desktop/ModdedClient"  # isolated game dir (own mods/worlds)
 MC_VERSION="1.21.1"
 FABRIC_LOADER="0.19.3"
 FABRIC_INSTALLER="1.1.1"
@@ -37,9 +37,9 @@ dl() { # dl <url> <dest> — skip if present AND non-empty
   curl -fSL --retry 3 -o "$2" "$1"
 }
 
-install_mods_from_list() { # <dest-mods-dir>
-  local dest="$1" line base fname
-  [ -f "$MODS_LIST" ] || { echo "   ⚠️  no mods.txt found — skipping gameplay mods"; return; }
+install_mods_from_list() { # <list-file> <dest-mods-dir>
+  local listfile="$1" dest="$2" line base fname
+  [ -f "$listfile" ] || { echo "   ⚠️  $(basename "$listfile") not found — skipping"; return; }
   while IFS= read -r line || [ -n "$line" ]; do
     line="${line%%#*}"
     line="$(printf '%s' "$line" | tr -d '[:space:]')"
@@ -47,7 +47,7 @@ install_mods_from_list() { # <dest-mods-dir>
     base="$(basename "$line")"
     fname="$(printf '%b' "${base//%/\\x}")"
     dl "$line" "$dest/$fname"
-  done < "$MODS_LIST"
+  done < "$listfile"
 }
 
 echo "🎮  Modded Minecraft CLIENT setup"
@@ -87,7 +87,9 @@ echo "   ✓ $VERSION_ID installed"
 echo "🧩  Required plumbing mod"
 dl "$FABRIC_API_URL" "$CLIENT_DIR/mods/fabric-api-0.116.13+1.21.1.jar"
 echo "🧩  Gameplay mods (from mods.txt) → $CLIENT_DIR/mods"
-install_mods_from_list "$CLIENT_DIR/mods"
+install_mods_from_list "$MODS_LIST" "$CLIENT_DIR/mods"
+echo "🧩  Client-only mods (from mods-client.txt)"
+install_mods_from_list "$SELF/mods-client.txt" "$CLIENT_DIR/mods"
 
 # ---------- 3. add a dedicated launcher profile -------------
 echo "🚀  Adding the '$PROFILE_NAME' launcher profile..."

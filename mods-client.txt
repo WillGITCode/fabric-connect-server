@@ -1,0 +1,15 @@
+# ============================================================
+#  mods-client.txt — CLIENT-ONLY mods.
+#  These are installed ONLY on players' clients, never on the server.
+#  Use this for rendering / UI / input mods that do nothing server-side:
+#  Sodium, Iris (shaders), a minimap, Mod Menu, etc.
+#
+#  Gameplay mods that BOTH the server and client need (Cobblemon, etc.)
+#  go in mods.txt instead.
+#
+#  Same rules as mods.txt: one Modrinth download link per line, must be
+#  built for Minecraft 1.21.1 Fabric. Comment out (#) or delete to remove.
+# ============================================================
+
+# --- Sodium (client rendering performance) ---
+https://cdn.modrinth.com/data/AANobbMI/versions/KIRFiWG4/sodium-fabric-0.8.12%2Bmc1.21.1.jar

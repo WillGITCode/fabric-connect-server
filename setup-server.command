@@ -10,7 +10,7 @@
 #   Prerequisite: Java 21 (JDK). See README.
 #
 #   Usage:  double-click this file, or:  ./setup-server.command [install-dir]
-#   Default install dir:  ~/ModdedServer
+#   Default install dir:  ~/Desktop/ModdedServer
 #
 #   Re-runnable: it won't re-download files that already exist.
 # ============================================================
@@ -21,7 +21,7 @@ SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODS_LIST="$SELF/mods.txt"
 
 # ---------- settings (safe to edit) -------------------------
-BASE_DIR="${1:-$HOME/ModdedServer}"
+BASE_DIR="${1:-$HOME/Desktop/ModdedServer}"
 ENDPOINT_PREFIX="mc"            # public address will be  <prefix>-xxxxxx.play.minekube.net
 MC_VERSION="1.21.1"
 FABRIC_LOADER="0.19.3"
@@ -57,9 +57,9 @@ render() { # render <template> <dest>  — substitute __SECRET__ / __ENDPOINT__
   sed -e "s|__SECRET__|${SECRET}|g" -e "s|__ENDPOINT__|${ENDPOINT_NAME}|g" "$1" > "$2"
 }
 
-install_mods_from_list() { # install_mods_from_list <dest-mods-dir>
-  local dest="$1" line base fname
-  [ -f "$MODS_LIST" ] || { echo "   ⚠️  no mods.txt found — skipping gameplay mods"; return; }
+install_mods_from_list() { # install_mods_from_list <list-file> <dest-mods-dir>
+  local listfile="$1" dest="$2" line base fname
+  [ -f "$listfile" ] || { echo "   ⚠️  $(basename "$listfile") not found — skipping"; return; }
   while IFS= read -r line || [ -n "$line" ]; do
     line="${line%%#*}"                       # strip comments
     line="$(printf '%s' "$line" | tr -d '[:space:]')"
@@ -67,7 +67,7 @@ install_mods_from_list() { # install_mods_from_list <dest-mods-dir>
     base="$(basename "$line")"
     fname="$(printf '%b' "${base//%/\\x}")"   # url-decode (e.g. %2B -> +)
     dl "$line" "$dest/$fname"
-  done < "$MODS_LIST"
+  done < "$listfile"
 }
 
 echo "🧱  Modded Minecraft server setup"
@@ -128,7 +128,7 @@ echo "🧩  Required plumbing mods"
 dl "$FABRIC_API_URL"   "$FABRIC_DIR/mods/fabric-api-0.116.13+1.21.1.jar"
 dl "$FABRICPROXY_URL"  "$FABRIC_DIR/mods/FabricProxy-Lite-2.10.1.jar"
 echo "🧩  Gameplay mods (from mods.txt)"
-install_mods_from_list "$FABRIC_DIR/mods"
+install_mods_from_list "$MODS_LIST" "$FABRIC_DIR/mods"
 
 # ---------- Gate proxy (from template) ----------------------
 echo "🌐  Gate proxy ($GATE_VERSION, darwin/$GARCH)"

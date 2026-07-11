@@ -20,10 +20,14 @@ Ships ready to run **Cobblemon** as a demo — [swap in any Fabric 1.21.1 mods](
 
 ## 2. Host the server (the person running it)
 
-1. Double-click **`setup-server.command`** — downloads everything (~200 MB, a few minutes) into a new `~/ModdedServer` folder.
-2. Open `~/ModdedServer` and double-click **`Start Server.command`**.
+1. Double-click **`setup-server.command`** — downloads everything (~200 MB, a few minutes) into a new **`~/Desktop/ModdedServer`** folder.
+2. Open the **ModdedServer** folder on your Desktop and double-click **`Start Server.command`**.
 3. Wait for the word **`Done`**. The window shows your address (e.g. `mc-ab12cd.play.minekube.net`) — share it with friends.
 4. **Stop:** close that window, or double-click **`Stop Server.command`**.
+
+> Installs to your Desktop by default. To put it elsewhere, drag the folder wherever you like after,
+> or run it with a path: `./setup-server.command /your/folder`. (Change the player folder by editing
+> `CLIENT_DIR` at the top of `setup-client.command`.)
 
 ## 3. Join as a player (each friend does this)
 
@@ -37,16 +41,23 @@ Ships ready to run **Cobblemon** as a demo — [swap in any Fabric 1.21.1 mods](
 
 ## 🔧 Change the mods
 
-The demo ships **Cobblemon**. To make it your own — remember **every player must have the same mods**:
+The demo ships **Cobblemon** (everyone) and **Sodium** (client only). Two lists control the mods —
+remember **every player needs the same gameplay mods**:
 
+- **`mods.txt`** — gameplay mods installed on **both** the server and every client (e.g. Cobblemon).
+- **`mods-client.txt`** — **client-only** mods that do nothing on a server (Sodium, shaders, minimaps).
+
+Change either list two ways:
 - **Quick (drag-and-drop):** drop a Fabric **1.21.1** mod `.jar` into the `mods` folders —
-  server `~/ModdedServer/FabricModdedServer/mods`, client `~/ModdedClient/mods`.
-- **Reproducible:** edit **`mods.txt`** — paste a mod's Modrinth download link on its own line
-  (Modrinth → mod page → Versions → right-click the 1.21.1 Fabric file → Copy Link), then re-run setup.
+  server `~/Desktop/ModdedServer/FabricModdedServer/mods`, client `~/Desktop/ModdedClient/mods`.
+- **Reproducible:** paste a mod's Modrinth link on its own line in the right list
+  (Modrinth → Versions → right-click the 1.21.1 Fabric file → Copy Link), then re-run setup.
   Remove one by deleting its line and its `.jar`.
-- Don't list **Fabric API** or **FabricProxy-Lite** — setup always installs those.
 
-Popular Cobblemon add-ons to try (must be built for MC 1.21.1): Simple Voice Chat, Cobbreeding, Mega Showdown, Radical Cobblemon Trainers.
+**Fabric API** and **FabricProxy-Lite** are installed automatically — Fabric API is required by most
+mods, and FabricProxy-Lite is what lets the server accept players coming through the proxy. Leave both out of the lists.
+
+Popular add-ons to try (must be built for MC 1.21.1): Simple Voice Chat, Cobbreeding, Mega Showdown, Radical Cobblemon Trainers.
 
 ## 🧪 Make a different server to experiment
 
@@ -68,7 +79,8 @@ Handy for trying other versions or mod sets by hand. Our `setup-server.command` 
 | Fabric API | 0.116.13+1.21.1 |
 | FabricProxy-Lite | 2.10.1 |
 | Gate | 0.68.26 |
-| Cobblemon (demo mod) | 1.7.3+1.21.1 |
+| Cobblemon (demo, both) | 1.7.3+1.21.1 |
+| Sodium (demo, client-only) | 0.8.12+mc1.21.1 |
 
 To move to another Minecraft version, update the URLs at the top of `setup-server.command` / `setup-client.command` and the links in `mods.txt`.
 
