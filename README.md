@@ -133,6 +133,42 @@ Test at `localhost:25565`, then share `your-name.play.minekube.net`. Players sti
 </details>
 
 <details>
+<summary><b>Troubleshooting</b></summary>
+
+**Opening the Fabric installer errors with `…JavaAppletPlugin.plugin…: No such file or directory`**
+macOS can't double-click a `.jar` with a JDK-only Java install. Use **`Fabric Installer.command`**, or run
+`java -jar ~/Downloads/fabric-installer-1.1.1.jar` in Terminal.
+
+**The server crashes at start with `zip END header not found` / `error reading server.jar`**
+A download finished corrupt/truncated (usually a flaky connection). Just **re-run `setup-server.command`** —
+it now checks each jar and re-downloads any bad ones. (Or delete the bad `.jar` and re-run.)
+
+**You (or a friend) land in a server called "Hub"**
+That's Minekube's fallback lobby — it means your endpoint was offline or the player got dropped from your
+backend. Make sure `Start Server` reached **`Done`** and the window is still open (both Fabric and Gate must
+be running). Check `GateProxy/gate.log` for tunnel errors.
+
+**Can't join / kicked as "Incompatible"**
+Everyone must be on the **same Minecraft version (1.21.1)** with the **same gameplay mods**. Players run
+`setup-client.command` and pick the **Modded** profile.
+
+**macOS blocks a `.command` ("unidentified developer")**
+Right-click the file → **Open** once, then it's trusted. (Files from `git clone` don't hit this.)
+
+**`Start Server` says Java isn't installed / wrong version**
+Install **JDK 21** ([Adoptium](https://adoptium.net/temurin/releases/?version=21)); `java -version` must say `21`.
+
+**The session drops about every 60 seconds**
+Known quirk when the player is on the **same machine/network** as the server (traffic hairpins out to the edge
+and back). `localhost:25565` and genuinely remote players are stable.
+
+**Where are the logs?**
+`setup-server.log` / `setup-client.log` in the install folder, plus `FabricModdedServer/logs/` and
+`GateProxy/gate.log` while running.
+
+</details>
+
+<details>
 <summary><b>Details — versions, how it works, lessons</b></summary>
 
 ### Pinned versions (verified July 2026)
