@@ -1,7 +1,9 @@
 # ---- Generated server instances & downloads (never commit) ----
-# Default install location if someone runs setup with no argument:
-/CobblemonServer/
-# If someone installs INTO this repo folder, ignore the generated bits:
+# Default install locations (setup installs to ~/Desktop, outside the repo,
+# but ignore these in case someone installs INTO the repo folder):
+/ModdedServer/
+/ModdedServer-*/
+/ModdedClient/
 /FabricModdedServer/
 /GateProxy/
 *.jar

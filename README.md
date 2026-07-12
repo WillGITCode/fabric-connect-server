@@ -25,9 +25,9 @@ Ships ready to run **Cobblemon** as a demo — [swap in any Fabric 1.21.1 mods](
 3. Wait for the word **`Done`**. The window shows your address (e.g. `mc-ab12cd.play.minekube.net`) — share it with friends.
 4. **Stop:** close that window, or double-click **`Stop Server.command`**.
 
-> Installs to your Desktop by default. To put it elsewhere, drag the folder wherever you like after,
-> or run it with a path: `./setup-server.command /your/folder`. (Change the player folder by editing
-> `CLIENT_DIR` at the top of `setup-client.command`.)
+> Installs to `~/Desktop/ModdedServer` by default. **Run it again and you get a second, independent
+> server** (`ModdedServer-2`, on its own ports) — handy for a different world or modpack, and several can
+> run at once. To choose the location yourself: `./setup-server.command /your/folder`.
 
 ## 3. Join as a player (each friend does this)
 
@@ -189,3 +189,16 @@ contains secrets or Mojang's `server.jar` (which must not be redistributed).
   (traffic hairpins out to the edge and back). `localhost:25565` and genuinely remote players are fine.
 
 </details>
+
+---
+
+## License & third-party software
+
+This project is open source under the [MIT License](LICENSE). It's **only scripts and docs — it bundles
+no third-party code**. At run time it *downloads* software from official sources, each under its own
+license and never redistributed here:
+
+- **Minecraft server** (Mojang) — proprietary. Using it means accepting the
+  [Minecraft EULA](https://www.minecraft.net/eula); the setup writes `eula=true` on your behalf.
+- **Fabric** loader/API — Apache-2.0. **Gate**, **FabricProxy-Lite**, and any **mods** you list —
+  each under its own license (see their pages).
